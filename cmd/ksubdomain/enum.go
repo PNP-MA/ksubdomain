@@ -19,43 +19,43 @@ import (
 var enumCommand = &cli.Command{
 	Name:    runner.EnumType,
 	Aliases: []string{"e"},
-	Usage:   "枚举域名",
+	Usage: "Enumerate Domain Names",
 	Flags: append(commonFlags, []cli.Flag{
 
 		&cli.StringFlag{
 			Name:     "domainList",
 			Aliases:  []string{"dl"},
-			Usage:    "从文件中指定域名",
+			Usage: "Specify domain names from a file",
 			Required: false,
 			Value:    "",
 		},
 		&cli.StringFlag{
 			Name:     "filename",
 			Aliases:  []string{"f"},
-			Usage:    "字典路径",
+			Usage: "Dictionary Path",
 			Required: false,
 			Value:    "",
 		},
 		&cli.BoolFlag{
 			Name:  "skip-wild",
-			Usage: "跳过泛解析域名",
+			Usage: "Skip wildcard domain name",
 			Value: false,
 		},
 		&cli.BoolFlag{
 			Name:  "ns",
-			Usage: "读取域名ns记录并加入到ns解析器中",
+			Usage: "Read domain name ns record and add it to ns resolver",
 			Value: false,
 		},
 		&cli.IntFlag{
 			Name:    "level",
 			Aliases: []string{"l"},
-			Usage:   "枚举几级域名，默认为2，二级域名",
+			Usage: "Enumerate the domain name level, the default is 2, the second-level domain name",
 			Value:   2,
 		},
 		&cli.StringFlag{
 			Name:    "level-dict",
 			Aliases: []string{"ld"},
-			Usage:   "枚举多级域名的字典文件，当level大于2时候使用，不填则会默认",
+			Usage: "Dictionary file for enumerating multi-level domain names, used when level is greater than 2, default value will be used if not filled in",
 			Value:   "",
 		},
 	}...),
@@ -66,7 +66,7 @@ var enumCommand = &cli.Command{
 		var domains []string
 		var writer []outputter.Output
 		var processBar processbar.ProcessBar = &processbar.ScreenProcess{}
-		var err error
+		was err error
 		var domainTotal int = 0
 
 		// handle domain
@@ -76,7 +76,7 @@ var enumCommand = &cli.Command{
 		if c.String("domainList") != "" {
 			dl, err := core.LinesInFile(c.String("domainList"))
 			if err != nil {
-				gologger.Fatalf("读取domain文件失败:%s\n", err.Error())
+				gologger.Fatalf("Failed to read domain file:%s\n", err.Error())
 			}
 			domains = append(dl, domains...)
 		}
@@ -94,7 +94,7 @@ var enumCommand = &cli.Command{
 				if !core.IsWildCard(sub) {
 					domains = append(domains, sub)
 				} else {
-					gologger.Infof("域名:%s 存在泛解析,已跳过", sub)
+					gologger.Infof("Domain name: %s has a pan-resolution, skipped", sub)
 				}
 			}
 		}
@@ -105,16 +105,16 @@ var enumCommand = &cli.Command{
 		} else {
 			subdomainDict, err = core.LinesInFile(c.String("filename"))
 			if err != nil {
-				gologger.Fatalf("打开文件:%s 错误:%s", c.String("filename"), err.Error())
+				gologger.Fatalf("Open file:%s Error:%s", c.String("filename"), err.Error())
 			}
 		}
 
 		levelDict := c.String("level-dict")
-		var levelDomains []string
+		var levelDomains [] string
 		if levelDict != "" {
 			dl, err := core.LinesInFile(levelDict)
 			if err != nil {
-				gologger.Fatalf("读取domain文件失败:%s,请检查--level-dict参数\n", err.Error())
+				gologger.Fatalf("Failed to read domain file: %s, please check --level-dict parameter\n", err.Error())
 			}
 			levelDomains = dl
 		} else if c.Int("level") > 2 {
@@ -142,7 +142,7 @@ var enumCommand = &cli.Command{
 			domainTotal *= len(levelDomains)
 		}
 
-		// 取域名的dns,加入到resolver中
+		// Get the dns of the domain name and add it to the resolver
 		specialDns := make(map[string][]string)
 		defaultResolver := options.GetResolvers(c.String("resolvers"))
 		if c.Bool("ns") {
