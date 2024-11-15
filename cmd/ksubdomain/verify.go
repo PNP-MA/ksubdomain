@@ -18,66 +18,66 @@ var commonFlags = []cli.Flag{
 	&cli.StringFlag{
 		Name:     "domain",
 		Aliases:  []string{"d"},
-		Usage:    "域名",
+		Usage: "Domain Name",
 		Required: false,
 		Value:    "",
 	},
 	&cli.StringFlag{
 		Name:     "band",
 		Aliases:  []string{"b"},
-		Usage:    "宽带的下行速度，可以5M,5K,5G",
+		Usage: "Broadband downlink speed can be 5M, 5K, 5G",
 		Required: false,
 		Value:    "2m",
 	},
 	&cli.StringFlag{
 		Name:     "resolvers",
 		Aliases:  []string{"r"},
-		Usage:    "dns服务器文件路径，一行一个dns地址，默认会使用内置dns",
+		Usage: "Dns server file path, one dns address per line, built-in dns will be used by default",
 		Required: false,
 		Value:    "",
 	},
 	&cli.StringFlag{
 		Name:     "output",
 		Aliases:  []string{"o"},
-		Usage:    "输出文件名",
+		Usage: "Output file name",
 		Required: false,
 		Value:    "",
 	},
 	&cli.BoolFlag{
 		Name:  "silent",
-		Usage: "使用后屏幕将仅输出域名",
+		Usage: "After use, the screen will only output the domain name",
 		Value: false,
 	},
 	&cli.IntFlag{
 		Name:  "retry",
-		Usage: "重试次数,当为-1时将一直重试",
+		Usage: "Number of retries, if it is -1, it will keep retrying",
 		Value: 3,
 	},
 	&cli.IntFlag{
 		Name:  "timeout",
-		Usage: "超时时间",
+		Usage: "Timeout",
 		Value: 6,
 	},
 	&cli.BoolFlag{
 		Name:  "stdin",
-		Usage: "接受stdin输入",
+		Usage: "Accepts input from stdin",
 		Value: false,
 	},
 	&cli.BoolFlag{
 		Name:    "only-domain",
 		Aliases: []string{"od"},
-		Usage:   "只打印域名，不显示ip",
-		Value:   false,
+		Usage: "Only print the domain name, not the IP address",
+		Value: false,
 	},
 	&cli.BoolFlag{
 		Name:    "not-print",
 		Aliases: []string{"np"},
-		Usage:   "不打印域名结果",
-		Value:   false,
+		Usage: "Do not print domain name results",
+		Value: false,
 	},
 	&cli.StringFlag{
 		Name:  "dns-type",
-		Usage: "dns类型 可以是a,aaaa,ns,cname,txt",
+		Usage: "dns type can be a,aaaa,ns,cname,txt",
 		Value: "a",
 	},
 }
@@ -85,12 +85,12 @@ var commonFlags = []cli.Flag{
 var verifyCommand = &cli.Command{
 	Name:    runner.VerifyType,
 	Aliases: []string{"v"},
-	Usage:   "验证模式",
+	Usage: "Verification Mode",
 	Flags: append([]cli.Flag{
 		&cli.StringFlag{
 			Name:     "filename",
 			Aliases:  []string{"f"},
-			Usage:    "验证域名文件路径",
+			Usage: "Verify domain name file path",
 			Required: false,
 			Value:    "",
 		},
@@ -118,7 +118,7 @@ var verifyCommand = &cli.Command{
 		if c.String("filename") != "" {
 			t, err := core.LinesReaderInFile(c.String("filename"))
 			if err != nil {
-				gologger.Fatalf("打开文件:%s 出现错误:%s", c.String("filename"), err.Error())
+				gologger.Fatalf("Open file:%s Error:%s", c.String("filename"), err.Error())
 			}
 			total += t
 		}
@@ -129,7 +129,7 @@ var verifyCommand = &cli.Command{
 			if c.String("filename") != "" {
 				f2, err := os.Open(c.String("filename"))
 				if err != nil {
-					gologger.Fatalf("打开文件:%s 出现错误:%s", c.String("filename"), err.Error())
+					gologger.Fatalf("Open file:%s Error:%s", c.String("filename"), err.Error())
 				}
 				defer f2.Close()
 				iofile := bufio.NewScanner(f2)
